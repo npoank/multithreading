@@ -5,19 +5,20 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ReentrantLockPract1 {
     public static void main(String[] args) throws InterruptedException {
-        CountWork countWork = new CountWork();
+        Task task = new Task();
+
 
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run() {
-                countWork.incrementThread1();
+                task.workthread1();
             }
         });
 
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public void run() {
-                countWork.incrementThread2();
+                task.workthread2();
             }
         });
 
@@ -26,33 +27,34 @@ public class ReentrantLockPract1 {
         thread1.join();
         thread2.join();
 
-        countWork.showResult();
+        task.showInfo();
+
     }
 }
 
-class CountWork {
+class Task {
     private int value;
     private Lock lock = new ReentrantLock();
 
-    private void count() {
+    private void increment() {
         for (int i = 0; i < 10000; i++) {
             value++;
         }
     }
 
-    public void incrementThread1() {
+    public void workthread1() {
         lock.lock();
-        count();
+        increment();
         lock.unlock();
     }
 
-    public void incrementThread2() {
+    public void workthread2() {
         lock.lock();
-        count();
+        increment();
         lock.unlock();
     }
 
-    public void showResult() {
+    public void showInfo() {
         System.out.println(value);
     }
 
